@@ -1,11 +1,10 @@
 package com.springboot.accounts.controllers;
 
 import com.springboot.accounts.converter.StringToUserConverter;
+import com.springboot.accounts.exceptions.BadFileContents;
 import com.springboot.accounts.model.User;
 import com.springboot.accounts.service.UserService;
-import com.sun.tools.jdeprscan.CSV;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,7 +14,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +34,7 @@ public class UserController {
                                 RedirectAttributes redirectAttributes) {
 
         if (file.isEmpty()) {
-            throw new IllegalArgumentException();
+            throw new BadFileContents("file is empty");
         }
         List<String> rawDataList = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(

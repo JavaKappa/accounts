@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.*;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDate;
@@ -17,8 +18,16 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private BigInteger id;
+    @Size(min = 5, max = 300)
+    @NotBlank(message = "Name cannot be empty")
+    @NotNull(message = "Name cannot be null")
     private String fullName;
+
+    @NotNull(message = "Birthday is cannot be null")
+    @Past
     private LocalDate birthday;
+    @NotNull(message = "Account number is cannot be null")
+    @Positive
     private BigInteger accountNumber;
     private BigDecimal accountBudget;
 
