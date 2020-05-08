@@ -19,8 +19,15 @@ public class User {
     private BigInteger id;
     private String fullName;
     private LocalDate birthday;
-    private String accountNumber;
+    private BigInteger accountNumber;
     private BigDecimal accountBudget;
+
+    public User(String fullName, LocalDate birthday, BigInteger accountNumber, BigDecimal accountBudget) {
+        this.fullName = fullName;
+        this.birthday = birthday;
+        this.accountNumber = accountNumber;
+        this.accountBudget = accountBudget;
+    }
 
     public BigInteger getId() {
         return id;
@@ -46,11 +53,11 @@ public class User {
         this.birthday = birthday;
     }
 
-    public String getAccountNumber() {
+    public BigInteger getAccountNumber() {
         return accountNumber;
     }
 
-    public void setAccountNumber(String accountNumber) {
+    public void setAccountNumber(BigInteger accountNumber) {
         this.accountNumber = accountNumber;
     }
 
