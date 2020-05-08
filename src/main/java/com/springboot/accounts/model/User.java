@@ -11,11 +11,13 @@ import java.time.LocalDate;
  * 07.05.2020
  */
 @Entity
-@Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = {"id", "account_number"}, name = "users_unique_account_number_idx")})
+@Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames ="account_number")})
 public class User {
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SequenceGenerator(name = "global_seq", sequenceName = "users_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+
     private BigInteger id;
     @Size(min = 5, max = 200)
     @NotBlank(message = "Name cannot be empty")

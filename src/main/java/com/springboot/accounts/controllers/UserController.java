@@ -5,12 +5,14 @@ import com.springboot.accounts.exceptions.BadFileContents;
 import com.springboot.accounts.model.User;
 import com.springboot.accounts.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -29,11 +31,10 @@ public class UserController {
     private StringToUserConverter converter;
 
 
-    @PostMapping(value = "/import")
-    public User csvFileUpload(@RequestParam MultipartFile file,
+    @PostMapping(value = "/import",produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<User> csvFileUpload(@RequestParam(value = "file", required = false) MultipartFile file,
                                 RedirectAttributes redirectAttributes) {
-
-        if (file.isEmpty()) {
+        if (file == null || file.isEmpty()) {
             throw new BadFileContents("file is empty");
         }
         List<String> rawDataList = new ArrayList<>();
@@ -49,7 +50,7 @@ public class UserController {
         }
 
         List<User> users = convertToListUser(rawDataList);
-        return service.save(users.get(0));
+        return service.saveAll(users);
     }
 
     private List<User> convertToListUser(List<String> rawDataList) {

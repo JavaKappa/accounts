@@ -13,5 +13,4 @@ import java.math.BigInteger;
 @Repository
 public interface CrudUserRepository extends JpaRepository<User, BigInteger> {
 
-
 }

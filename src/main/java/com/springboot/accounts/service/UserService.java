@@ -1,10 +1,15 @@
 package com.springboot.accounts.service;
 
+import com.springboot.accounts.exceptions.ConflictException;
 import com.springboot.accounts.model.User;
 import com.springboot.accounts.repository.CrudUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.validation.constraints.NotNull;
+import java.util.List;
 
 /**
  * Капу пк
@@ -17,6 +22,19 @@ public class UserService {
 
     public User save(User user) {
         return repository.save(user);
+    }
+
+    @Transactional
+    public List<User> saveAll(@NotNull List<User> users) {
+        users.forEach(user -> {
+            try {
+                save(user);
+            } catch (DataIntegrityViolationException e) {
+                throw new ConflictException(String.format("%s account number from %s is already in Database",
+                        user.getAccountNumber(), user.getFullName()));
+            }
+        });
+        return users;
     }
 
 
