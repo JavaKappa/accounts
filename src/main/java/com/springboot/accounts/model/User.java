@@ -1,9 +1,6 @@
 package com.springboot.accounts.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -14,28 +11,37 @@ import java.time.LocalDate;
  * 07.05.2020
  */
 @Entity
+@Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = {"id", "account_number"}, name = "users_unique_account_number_idx")})
 public class User {
     @Id
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private BigInteger id;
-    @Size(min = 5, max = 300)
+    @Size(min = 5, max = 200)
     @NotBlank(message = "Name cannot be empty")
     @NotNull(message = "Name cannot be null")
+    @Column(name = "full_name")
     private String fullName;
 
     @NotNull(message = "Birthday is cannot be null")
     @Past
+    @Column(name = "birthday")
     private LocalDate birthday;
     @NotNull(message = "Account number is cannot be null")
-    @Positive
-    private BigInteger accountNumber;
+    @Column(name = "account_number")
+    @Size(min = 20, max = 20)
+    private String accountNumber;
+    @Column(name = "account_budget")
     private BigDecimal accountBudget;
 
-    public User(String fullName, LocalDate birthday, BigInteger accountNumber, BigDecimal accountBudget) {
+    public User(String fullName, LocalDate birthday, String accountNumber, BigDecimal accountBudget) {
         this.fullName = fullName;
         this.birthday = birthday;
         this.accountNumber = accountNumber;
         this.accountBudget = accountBudget;
+    }
+
+    public User() {
     }
 
     public BigInteger getId() {
@@ -62,11 +68,11 @@ public class User {
         this.birthday = birthday;
     }
 
-    public BigInteger getAccountNumber() {
+    public String getAccountNumber() {
         return accountNumber;
     }
 
-    public void setAccountNumber(BigInteger accountNumber) {
+    public void setAccountNumber(String accountNumber) {
         this.accountNumber = accountNumber;
     }
 

@@ -30,7 +30,7 @@ public class UserController {
 
 
     @PostMapping(value = "/import")
-    public String csvFileUpload(@RequestParam("file") MultipartFile file,
+    public User csvFileUpload(@RequestParam MultipartFile file,
                                 RedirectAttributes redirectAttributes) {
 
         if (file.isEmpty()) {
@@ -49,7 +49,7 @@ public class UserController {
         }
 
         List<User> users = convertToListUser(rawDataList);
-        return users.toString();
+        return service.save(users.get(0));
     }
 
     private List<User> convertToListUser(List<String> rawDataList) {

@@ -15,8 +15,8 @@ public class UserService {
     @Autowired
     private CrudUserRepository repository;
 
-    public User store(MultipartFile file) {
-        return null;
+    public User save(User user) {
+        return repository.save(user);
     }
 
 
