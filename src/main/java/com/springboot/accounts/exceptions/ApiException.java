@@ -1,7 +1,6 @@
 package com.springboot.accounts.exceptions;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDateTime;
 

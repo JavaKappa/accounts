@@ -3,7 +3,10 @@ package com.springboot.accounts.model;
 import com.springboot.accounts.validators.ValidAccountNumber;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
+import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDate;
@@ -13,7 +16,7 @@ import java.time.LocalDate;
  * 07.05.2020
  */
 @Entity
-@Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames ="account_number")})
+@Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = "account_number")})
 public class User {
     @Id
     @Column(name = "id")

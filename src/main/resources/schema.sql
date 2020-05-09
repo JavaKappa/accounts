@@ -1,8 +1,8 @@
 DROP TABLE IF EXISTS users;
 
-DROP SEQUENCE if EXISTS hibernate_sequence;
+DROP SEQUENCE if EXISTS HIBERNATE_SEQUENCE;
 
-CREATE SEQUENCE hibernate_sequence;
+CREATE SEQUENCE HIBERNATE_SEQUENCE;
 
 
 create table users
@@ -17,6 +17,4 @@ create table users
     full_name      varchar(200)   not null
 );
 
-alter table users
-    owner to "user";
 

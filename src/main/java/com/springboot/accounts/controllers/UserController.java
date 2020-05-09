@@ -8,16 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.math.BigInteger;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +29,11 @@ public class UserController {
     private UserService service;
     @Autowired
     private StringToUserConverter converter;
+
+    @GetMapping("/users/{id}")
+    public User getUser(@PathVariable("id") BigInteger id) {
+        return service.getUser(id);
+    }
 
     @GetMapping(value = "/users", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<User> getUsers() {
@@ -55,7 +57,7 @@ public class UserController {
                 rawDataList.add(s);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new ApiRequestException(e.getMessage(), e);
         }
 
         List<User> users = convertToListUser(rawDataList);

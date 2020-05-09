@@ -27,7 +27,7 @@ public class StringUserConverterImpl implements StringToUserConverter {
 
     private LocalDate validateBirthday(String date, String rawData) {
         try {
-           return LocalDate.parse(date);
+            return LocalDate.parse(date);
         } catch (DateTimeParseException exception) {
             throw new ApiRequestException(rawData + " is incorrect birthday format. Users not saved");
         }

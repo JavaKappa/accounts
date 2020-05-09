@@ -1,12 +1,8 @@
 package com.springboot.accounts.exceptions;
 
-import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.TransactionSystemException;
-import org.springframework.validation.BindException;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -16,11 +12,17 @@ import java.time.LocalDateTime;
 public class ApiExceptionHandler {
     @ExceptionHandler(value = {ApiRequestException.class})
     public ResponseEntity<Object> handleApiRequestException(ApiRequestException e) {
+        HttpStatus status;
+        if (e.getMessage().startsWith("Not found user")) {
+            status = HttpStatus.NOT_FOUND;
+        } else {
+            status = HttpStatus.BAD_REQUEST;
+        }
         ApiException apiException = new ApiException(e.getMessage(),
                 e,
-                HttpStatus.BAD_REQUEST,
+                status,
                 LocalDateTime.now());
-        return new ResponseEntity<>(apiException, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(apiException, apiException.getStatus());
     }
 
     @ExceptionHandler(value = DataIntegrityViolationException.class)
@@ -29,7 +31,7 @@ public class ApiExceptionHandler {
                 e,
                 HttpStatus.CONFLICT,
                 LocalDateTime.now());
-        return new ResponseEntity<>(apiException, HttpStatus.CONFLICT);
+        return new ResponseEntity<>(apiException, apiException.getStatus());
 
     }
 
@@ -39,7 +41,7 @@ public class ApiExceptionHandler {
                 e,
                 HttpStatus.BAD_REQUEST,
                 LocalDateTime.now());
-        return new ResponseEntity<>(apiException, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(apiException, apiException.getStatus());
     }
 
     public Throwable getRootCause(Throwable t) {

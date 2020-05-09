@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.constraints.NotNull;
+import java.math.BigInteger;
 import java.util.List;
 
 /**
@@ -39,6 +40,14 @@ public class UserService {
 
     public List<User> getAllUsers() {
         return repository.findAll();
+    }
+
+    public User getUser(BigInteger id) {
+        User user = repository.getUserById(id);
+        if (user == null) {
+            throw new ApiRequestException("Not found user with id " + id);
+        }
+        return repository.getUserById(id);
     }
 
 

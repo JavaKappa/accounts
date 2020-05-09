@@ -12,5 +12,5 @@ import java.math.BigInteger;
  */
 @Repository
 public interface CrudUserRepository extends JpaRepository<User, BigInteger> {
-
+    User getUserById(BigInteger id);
 }
