@@ -5,7 +5,9 @@ import com.springboot.accounts.exceptions.BadFileContents;
 import com.springboot.accounts.model.User;
 import com.springboot.accounts.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,8 +34,8 @@ public class UserController {
 
 
     @PostMapping(value = "/import",produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<User> csvFileUpload(@RequestParam(value = "file", required = false) MultipartFile file,
-                                RedirectAttributes redirectAttributes) {
+    public ResponseEntity<List<User>> csvFileUpload(@RequestParam(value = "file", required = false) MultipartFile file,
+                                        RedirectAttributes redirectAttributes) {
         if (file == null || file.isEmpty()) {
             throw new BadFileContents("file is empty");
         }
@@ -43,6 +45,9 @@ public class UserController {
                         file.getInputStream()))){
             String s;
             while ((s = reader.readLine()) != null) {
+                if (s.length() == 0){
+                    continue;
+                }
                 rawDataList.add(s);
             }
         } catch (IOException e) {
@@ -50,15 +55,13 @@ public class UserController {
         }
 
         List<User> users = convertToListUser(rawDataList);
-        return service.saveAll(users);
+
+        return new ResponseEntity<>(service.saveAll(users), HttpStatus.CREATED);
     }
 
     private List<User> convertToListUser(List<String> rawDataList) {
         List<User> users = new ArrayList<>();
-        for (int i = 0; i < rawDataList.size(); i++) {
-            users.add(converter.convert(rawDataList.get(i)));
-        }
-
+        rawDataList.forEach(u -> users.add(converter.convert(u)));
         return users;
     }
 }

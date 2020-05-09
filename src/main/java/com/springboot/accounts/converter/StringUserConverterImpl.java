@@ -22,7 +22,7 @@ public class StringUserConverterImpl implements StringToUserConverter {
         BigInteger accountNumber = validateAccountNumber(params[2], rawData);
         BigDecimal accountBudget = validateAccountBudget(params[3], rawData);
 
-        return new User(fullName, birthday, accountNumber.toString(), accountBudget);
+        return new User(fullName, birthday, accountNumber, accountBudget);
     }
 
     private LocalDate validateBirthday(String date, String rawData) {

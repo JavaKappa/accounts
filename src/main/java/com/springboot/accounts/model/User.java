@@ -31,12 +31,11 @@ public class User {
     private LocalDate birthday;
     @NotNull(message = "Account number is cannot be null")
     @Column(name = "account_number")
-    @Size(min = 20, max = 20)
-    private String accountNumber;
+    private BigInteger accountNumber;
     @Column(name = "account_budget")
     private BigDecimal accountBudget;
 
-    public User(String fullName, LocalDate birthday, String accountNumber, BigDecimal accountBudget) {
+    public User(String fullName, LocalDate birthday, BigInteger accountNumber, BigDecimal accountBudget) {
         this.fullName = fullName;
         this.birthday = birthday;
         this.accountNumber = accountNumber;
@@ -70,11 +69,11 @@ public class User {
         this.birthday = birthday;
     }
 
-    public String getAccountNumber() {
+    public BigInteger getAccountNumber() {
         return accountNumber;
     }
 
-    public void setAccountNumber(String accountNumber) {
+    public void setAccountNumber(BigInteger accountNumber) {
         this.accountNumber = accountNumber;
     }
 
