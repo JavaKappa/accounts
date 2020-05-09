@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.TransactionSystemException;
 import org.springframework.validation.BindException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -29,10 +30,16 @@ public class ApiExceptionHandler {
                 HttpStatus.CONFLICT,
                 LocalDateTime.now());
         return new ResponseEntity<>(apiException, HttpStatus.CONFLICT);
+
     }
-@ExceptionHandler(TransactionSystemException.class)
-    public String handleConstraintViolationException(TransactionSystemException e) {
-        return e.getMessage();
+
+    @ExceptionHandler(NumberFormatException.class)
+    public ResponseEntity<Object> handleConstraintViolationException(NumberFormatException e) {
+        ApiException apiException = new ApiException(getRootCause(e).getMessage(),
+                e,
+                HttpStatus.BAD_REQUEST,
+                LocalDateTime.now());
+        return new ResponseEntity<>(apiException, HttpStatus.BAD_REQUEST);
     }
 
     public Throwable getRootCause(Throwable t) {
