@@ -1,6 +1,6 @@
 package com.springboot.accounts.service;
 
-import com.springboot.accounts.exceptions.ConflictException;
+import com.springboot.accounts.exceptions.ApiRequestException;
 import com.springboot.accounts.model.User;
 import com.springboot.accounts.repository.CrudUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +30,8 @@ public class UserService {
             try {
                 save(user);
             } catch (DataIntegrityViolationException e) {
-                throw new ConflictException(String.format("%s account number from %s is already in Database",
-                        user.getAccountNumber(), user.getFullName()));
+                throw new ApiRequestException(String.format("%s account number from %s is already in Database",
+                        user.getAccountNumber(), user.getFullName()), e);
             }
         });
         return users;

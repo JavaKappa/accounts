@@ -1,4 +1,4 @@
-package com.springboot.accounts.converter;
+package com.springboot.accounts.converters;
 
 import com.springboot.accounts.model.User;
 

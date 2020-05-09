@@ -1,7 +1,7 @@
 package com.springboot.accounts.controllers;
 
-import com.springboot.accounts.converter.StringToUserConverter;
-import com.springboot.accounts.exceptions.BadFileContents;
+import com.springboot.accounts.converters.StringToUserConverter;
+import com.springboot.accounts.exceptions.ApiRequestException;
 import com.springboot.accounts.model.User;
 import com.springboot.accounts.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -37,7 +36,7 @@ public class UserController {
     public ResponseEntity<List<User>> csvFileUpload(@RequestParam(value = "file", required = false) MultipartFile file,
                                         RedirectAttributes redirectAttributes) {
         if (file == null || file.isEmpty()) {
-            throw new BadFileContents("file is empty");
+            throw new ApiRequestException("file is empty");
         }
         List<String> rawDataList = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(

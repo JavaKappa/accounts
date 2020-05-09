@@ -1,6 +1,6 @@
-package com.springboot.accounts.converter;
+package com.springboot.accounts.converters;
 
-import com.springboot.accounts.exceptions.BadFileContents;
+import com.springboot.accounts.exceptions.ApiRequestException;
 import com.springboot.accounts.model.User;
 import org.springframework.stereotype.Component;
 
@@ -15,12 +15,12 @@ public class StringUserConverterImpl implements StringToUserConverter {
     public User convert(String rawData) {
         String[] params = rawData.split(";");
         if (params.length != 4) {
-            throw new BadFileContents(rawData + " is incorrect users not saved");
+            throw new ApiRequestException(rawData + " is incorrect users not saved");
         }
         String fullName = params[0];
-        LocalDate birthday = validateBirthday(params[1], rawData);
-        BigInteger accountNumber = validateAccountNumber(params[2], rawData);
-        BigDecimal accountBudget = validateAccountBudget(params[3], rawData);
+        LocalDate birthday = validateBirthday(params[1].trim(), rawData);
+        BigInteger accountNumber = new BigInteger(params[2].trim());
+        BigDecimal accountBudget = validateAccountBudget(params[3].trim(), rawData);
 
         return new User(fullName, birthday, accountNumber, accountBudget);
     }
@@ -29,18 +29,18 @@ public class StringUserConverterImpl implements StringToUserConverter {
         try {
            return LocalDate.parse(date);
         } catch (DateTimeParseException exception) {
-            throw new BadFileContents(rawData + " is incorrect birthday format. Users not saved");
+            throw new ApiRequestException(rawData + " is incorrect birthday format. Users not saved");
         }
     }
 
     private BigInteger validateAccountNumber(String accountNumber, String rawData) {
         if (accountNumber.length() != 20 || accountNumber.startsWith("0")) {
-            throw new BadFileContents(String.format("%s is incorrect size of Account number", rawData));
+            throw new ApiRequestException(String.format("%s is incorrect size of Account number", rawData));
         }
         try {
             return new BigInteger(accountNumber);
-        } catch (Exception e) {
-            throw new BadFileContents(String.format("%s is incorrect Account number", rawData));
+        } catch (NumberFormatException e) {
+            throw new ApiRequestException(String.format("%s is incorrect Account number", rawData), e);
         }
     }
 
@@ -48,7 +48,7 @@ public class StringUserConverterImpl implements StringToUserConverter {
         try {
             return new BigDecimal(accountBudget);
         } catch (Exception e) {
-            throw new BadFileContents(String.format("%s is incorrect account budget", rawData));
+            throw new ApiRequestException(String.format("%s account number must be a digit", rawData));
         }
     }
 }

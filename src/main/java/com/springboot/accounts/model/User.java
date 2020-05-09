@@ -1,5 +1,7 @@
 package com.springboot.accounts.model;
 
+import com.springboot.accounts.validators.ValidAccountNumber;
+
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
@@ -20,8 +22,8 @@ public class User {
 
     private BigInteger id;
     @Size(min = 5, max = 200)
-    @NotBlank(message = "Name cannot be empty")
     @NotNull(message = "Name cannot be null")
+    @NotBlank
     @Column(name = "full_name")
     private String fullName;
 
@@ -31,6 +33,7 @@ public class User {
     private LocalDate birthday;
     @NotNull(message = "Account number is cannot be null")
     @Column(name = "account_number")
+    @ValidAccountNumber(message = "account number length must be 20 and cannot starts with 0")
     private BigInteger accountNumber;
     @Column(name = "account_budget")
     private BigDecimal accountBudget;
