@@ -10,13 +10,13 @@ import java.time.LocalDateTime;
  */
 public class ApiException {
     public final String message;
-    public final String e;
+    public final String exceptionClassName;
     public final HttpStatus status;
     public final LocalDateTime localDateTime;
 
-    public ApiException(String message, String e, HttpStatus status, LocalDateTime localDateTime) {
+    public ApiException(String message, String exceptionClassName, HttpStatus status, LocalDateTime localDateTime) {
         this.message = message;
-        this.e = e;
+        this.exceptionClassName = exceptionClassName;
         this.status = status;
         this.localDateTime = localDateTime;
     }
@@ -25,8 +25,8 @@ public class ApiException {
         return message;
     }
 
-    public String getE() {
-        return e;
+    public String getExceptionClassName() {
+        return exceptionClassName;
     }
 
     public HttpStatus getStatus() {
