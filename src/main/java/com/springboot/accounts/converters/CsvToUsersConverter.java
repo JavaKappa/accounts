@@ -1,10 +1,7 @@
 package com.springboot.accounts.converters;
 
-import com.opencsv.CSVReader;
-import com.opencsv.CSVWriter;
-import com.opencsv.bean.CsvToBean;
-import com.opencsv.bean.CsvToBeanBuilder;
-import com.opencsv.bean.HeaderColumnNameMappingStrategy;
+import com.opencsv.*;
+import com.opencsv.bean.*;
 import com.springboot.accounts.exceptions.ApiRequestException;
 import com.springboot.accounts.model.User;
 import org.springframework.stereotype.Component;
@@ -19,23 +16,23 @@ import java.util.List;
  */
 @Component
 public class CsvToUsersConverter {
-    public List<User> readCsvFile(MultipartFile file) throws FileNotFoundException {
-        CSVReader r = null;
+    public List<User> readCsvFile(MultipartFile file) {
+        CSVParser parser = new CSVParserBuilder()
+                .withSeparator(';')
+                .withQuoteChar(CSVWriter.NO_QUOTE_CHARACTER)
+                .build();
+        CSVReader reader = null;
         try {
-            r = new CSVReader(new InputStreamReader(file.getInputStream()));
+            reader = new CSVReaderBuilder(new BufferedReader(new InputStreamReader(file.getInputStream()))).withCSVParser(parser).build();
         } catch (IOException e) {
-            throw new ApiRequestException("something wrong with file ", e);
+            throw new ApiRequestException("Something wrong with file", e);
         }
         HeaderColumnNameMappingStrategy<User> ms = new HeaderColumnNameMappingStrategy<>();
         ms.setType(User.class);
 
-        CsvToBean<User> csvToBean = new CsvToBeanBuilder<User>(r)
-                .withSeparator(';')
+        CsvToBean<User> csvToBean = new CsvToBeanBuilder<User>(reader)
                 .withMappingStrategy(ms)
-                .withQuoteChar(CSVWriter.NO_QUOTE_CHARACTER)
                 .build();
-
-        System.out.println(csvToBean.parse());
         return csvToBean.parse();
     }
 }
