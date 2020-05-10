@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
+import java.nio.charset.Charset;
 import java.util.List;
 
 /**
@@ -23,8 +24,9 @@ public class CsvToUsersConverter {
                 .build();
         CSVReader reader = null;
         try {
-            reader = new CSVReaderBuilder(new BufferedReader(new InputStreamReader(file.getInputStream()))).withCSVParser(parser).build();
+            reader = new CSVReaderBuilder(new BufferedReader(new InputStreamReader(file.getInputStream(), Charset.forName("Utf-8")))).withCSVParser(parser).build();
         } catch (IOException e) {
+            e.printStackTrace();
             throw new ApiRequestException("Something wrong with file", e);
         }
         HeaderColumnNameMappingStrategy<User> ms = new HeaderColumnNameMappingStrategy<>();

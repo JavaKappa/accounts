@@ -16,6 +16,7 @@ import java.time.format.DateTimeParseException;
 public class ApiExceptionHandler {
     @ExceptionHandler(value = {ApiRequestException.class})
     public ResponseEntity<Object> handleApiRequestException(ApiRequestException e) {
+        e.printStackTrace();
         HttpStatus status;
         if (e.getMessage().startsWith("Not found user")) {
             status = HttpStatus.NOT_FOUND;
@@ -31,6 +32,7 @@ public class ApiExceptionHandler {
 
     @ExceptionHandler(value = DataIntegrityViolationException.class)
     public ResponseEntity<Object> handleDataIntegrityException(DataIntegrityViolationException e) {
+        e.printStackTrace();
         ApiException apiException = new ApiException(getRootCause(e).getMessage(),
                 e.getClass().getSimpleName(),
                 HttpStatus.CONFLICT,
@@ -41,6 +43,7 @@ public class ApiExceptionHandler {
 
     @ExceptionHandler(NumberFormatException.class)
     public ResponseEntity<Object> handleConstraintViolationException(NumberFormatException e) {
+        e.printStackTrace();
         ApiException apiException = new ApiException("It is must be digit ",
                 e.getClass().getSimpleName(),
                 HttpStatus.BAD_REQUEST,
@@ -51,6 +54,7 @@ public class ApiExceptionHandler {
     @ExceptionHandler({Exception.class})
     @Order(Ordered.LOWEST_PRECEDENCE)
     public ResponseEntity<Object> handleConstraintViolation(Exception e) {
+        e.printStackTrace();
         String message;
         if (getRootCause(e).getClass().getSimpleName().equals("ConstraintViolationException")) {
 
@@ -66,6 +70,7 @@ public class ApiExceptionHandler {
     }
     @ExceptionHandler(DateTimeParseException.class)
     public ResponseEntity<Object> handleDateTimeParseException(DateTimeParseException e) {
+        e.printStackTrace();
         ApiException apiException = new ApiException("It is incorrect date format must be yyyy-mm-dd",
                 e.getClass().getSimpleName(),
                 HttpStatus.BAD_REQUEST,
