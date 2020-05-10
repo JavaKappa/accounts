@@ -1,5 +1,11 @@
 package com.springboot.accounts.service;
 
+import com.opencsv.CSVReader;
+import com.opencsv.CSVWriter;
+import com.opencsv.bean.*;
+import com.opencsv.exceptions.CsvDataTypeMismatchException;
+import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
+import com.springboot.accounts.converters.CsvToUsersConverter;
 import com.springboot.accounts.converters.StringToUserConverter;
 import com.springboot.accounts.exceptions.ApiRequestException;
 import com.springboot.accounts.model.User;
@@ -11,12 +17,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotNull;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.nio.charset.Charset;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -29,32 +35,68 @@ public class UserServiceImpl implements UserService {
     private CrudUserRepository repository;
     @Autowired
     private StringToUserConverter converter;
+    @Autowired
+    private CsvToUsersConverter csvToUsersConverter;
 
+    @Override
     public User save(User user) {
         return repository.save(user);
     }
 
+    @Override
     public List<User> importUsers(MultipartFile file) {
-        if (file == null || file.isEmpty()) {
-            throw new ApiRequestException("file is empty");
+        try {
+            List<User> users = csvToUsersConverter.readCsvFile(file);
+            return users;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
-        List<String> rawDataList = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(
-                new InputStreamReader(
-                        file.getInputStream(), Charset.forName("utf-8")))) {
-            String s;
-            while ((s = reader.readLine()) != null) {
-                if (s.length() == 0) {
-                    continue;
-                }
-                rawDataList.add(s);
-            }
-        } catch (IOException e) {
-            throw new ApiRequestException(e.getMessage(), e);
-        }
+//            FileWriter w = new FileWriter("D:/123/123.csv");
+//            StatefulBeanToCsv<User> beanToCsv = new StatefulBeanToCsvBuilder<User>(w).withQuotechar(CSVWriter.NO_QUOTE_CHARACTER)
+//                    .withSeparator(';')
+//                    .build();
+//            beanToCsv.write(new User("tERminator", LocalDate.now(), new BigInteger("3333"), new BigDecimal("222.22")));
+//            beanToCsv.write(new User("tERminator", LocalDate.now(), new BigInteger("3333"), new BigDecimal("222.22")));
+//            beanToCsv.write(new User("tERminator", LocalDate.now(), new BigInteger("3333"), new BigDecimal("222.22")));
+//            w.close();
+//            HeaderColumnNameMappingStrategy<User> ms = new HeaderColumnNameMappingStrategy<>();
+//            ms.setType(User.class);
+//
+//            FileReader r = new FileReader("D:/123/123.csv");
+//            CsvToBean<User> csvToBean = new CsvToBeanBuilder<User>(new CSVReader(r))
+//                    .withType(User.class)
+//                    .withQuoteChar(CSVWriter.NO_QUOTE_CHARACTER)
+//                    .withSeparator(';')
+//                    .build();
+//            csvToBean.parse().forEach(u -> System.out.println(u));
+//            r.close();
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } catch (CsvRequiredFieldEmptyException e) {
+//            e.printStackTrace();
+//        } catch (CsvDataTypeMismatchException e) {
+//            e.printStackTrace();
+//        }
 
-        List<User> users = convertToListUser(rawDataList);
-        return saveAll(users);
+        return null;
+//        List<String> rawDataList = new ArrayList<>();
+//        try (BufferedReader reader = new BufferedReader(
+//                new InputStreamReader(
+//                        file.getInputStream(), Charset.forName("utf-8")))) {
+//            String s;
+//            while ((s = reader.readLine()) != null) {
+//                if (s.length() == 0) {
+//                    continue;
+//                }
+//                rawDataList.add(s);
+//            }
+//        } catch (IOException e) {
+//            throw new ApiRequestException(e.getMessage(), e);
+//        }
+//
+//        List<User> users = convertToListUser(rawDataList);
+//        return saveAll(users);
     }
 
     @Transactional
