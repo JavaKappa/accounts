@@ -1,5 +1,7 @@
 package com.springboot.accounts.validators;
 
+import com.springboot.accounts.exceptions.ApiRequestException;
+
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.math.BigInteger;
