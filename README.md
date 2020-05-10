@@ -1,6 +1,6 @@
 # **Accounts web application**
 
-Сервис предоставляеет возможность загрузить данные в формате "data.csv" в бд по endpoint /import методом POST
+Сервис предоставляеет возможность загрузить данные в формате "data.csv" в бд по endpoint /import методом POST  form data parameter "file"
 пример csv файла: 
 
 
