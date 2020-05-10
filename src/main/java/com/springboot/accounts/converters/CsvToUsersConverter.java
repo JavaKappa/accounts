@@ -1,5 +1,6 @@
 package com.springboot.accounts.converters;
 
+import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
@@ -19,9 +20,9 @@ import java.util.List;
 @Component
 public class CsvToUsersConverter {
     public List<User> readCsvFile(MultipartFile file) throws FileNotFoundException {
-        Reader r = null;
+        CSVReader r = null;
         try {
-            r = new BufferedReader(new InputStreamReader(file.getInputStream()));
+            r = new CSVReader(new InputStreamReader(file.getInputStream()));
         } catch (IOException e) {
             throw new ApiRequestException("something wrong with file ", e);
         }

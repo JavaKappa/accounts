@@ -52,7 +52,8 @@ public class UserServiceImpl implements UserService {
             e.printStackTrace();
         }
 //            FileWriter w = new FileWriter("D:/123/123.csv");
-//            StatefulBeanToCsv<User> beanToCsv = new StatefulBeanToCsvBuilder<User>(w).withQuotechar(CSVWriter.NO_QUOTE_CHARACTER)
+//            StatefulBeanToCsv<User> beanToCsv = new StatefulBeanToCsvBuilder<User>(w)
+//            .withQuotechar(CSVWriter.NO_QUOTE_CHARACTER)
 //                    .withSeparator(';')
 //                    .build();
 //            beanToCsv.write(new User("tERminator", LocalDate.now(), new BigInteger("3333"), new BigDecimal("222.22")));
