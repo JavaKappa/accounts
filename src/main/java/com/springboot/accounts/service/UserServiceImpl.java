@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> importUsers(MultipartFile file) {
-            List<User> users = csvToUsersConverter.readCsvFile(file);
+        List<User> users = csvToUsersConverter.readCsvFile(file);
         return repository.saveAll(users);
 
     }

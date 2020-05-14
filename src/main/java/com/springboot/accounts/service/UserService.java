@@ -16,7 +16,6 @@ import java.util.List;
 public interface UserService {
     List<User> importUsers(MultipartFile file);
 
-    @Transactional
     List<User> saveAll(@NotNull List<User> users);
 
     User getUser(BigInteger id);

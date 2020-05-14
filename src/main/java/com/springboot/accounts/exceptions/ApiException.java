@@ -1,4 +1,4 @@
-package com.springboot.accounts.model;
+package com.springboot.accounts.exceptions;
 
 import org.springframework.http.HttpStatus;
 
@@ -9,10 +9,10 @@ import java.time.LocalDateTime;
  * 09.05.2020
  */
 public class ApiException {
-    public final String message;
-    public final String exceptionClassName;
-    public final HttpStatus status;
-    public final LocalDateTime localDateTime;
+    private final String message;
+    private final String exceptionClassName;
+    private final HttpStatus status;
+    private final LocalDateTime localDateTime;
 
     public ApiException(String message, String exceptionClassName, HttpStatus status, LocalDateTime localDateTime) {
         this.message = message;

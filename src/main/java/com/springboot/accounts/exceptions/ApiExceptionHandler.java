@@ -1,6 +1,5 @@
 package com.springboot.accounts.exceptions;
 
-import com.springboot.accounts.model.ApiException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.dao.DataIntegrityViolationException;
